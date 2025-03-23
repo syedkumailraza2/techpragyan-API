@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import userRoutes from "./router/userRoutes.js";
 import cors from "cors"
 import questionRoutes from "./router/questionRoutes.js";
+import subjectRoutes from "./router/subjectRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -14,6 +15,7 @@ app.use(cors())
 
 app.use("/user", userRoutes);
 app.use('/question', questionRoutes)
+app.use('/subject',subjectRoutes)
 
 app.get('/', (req,res)=>{
     res.send('Hello World')
