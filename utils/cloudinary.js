@@ -16,7 +16,7 @@ console.log(`Cloud Secret: ${process.env.CLOUDINARY_API_SECRET}`);
         return new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(
                 { 
-                    resource_type: 'image',
+                    resource_type: 'auto',
                     folder: 'PrepGen',
                 },
                 (error, result) => {
