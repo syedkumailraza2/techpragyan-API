@@ -5,7 +5,7 @@ const questionSchema = new mongoose.Schema({
     text: { type: String, required: true },
     options: [],
     correctAnswer: { type: String, required: true },
-    points: { type: Number },
+    points: { type: String },
 });
 
 const Question = mongoose.model('Question', questionSchema);

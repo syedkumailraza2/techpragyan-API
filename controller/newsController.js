@@ -10,6 +10,7 @@ export const getAllPosts = async (req, res) => {
   }
 };
 
+
 // Get a single post by ID
 export const getPostById = async (req, res) => {
   try {
