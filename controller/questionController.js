@@ -3,35 +3,21 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const addQuestion = async (req, res) => {
     try {
-        const { question, answer, options, subjectId } = req.body;
+        const { id, text, options, correctAnswer, points } = req.body;
 
         // Validate required fields
-        if (!question || !answer || !options || !subjectId) {
+        if (!text || !correctAnswer || !options || !id || !points) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        // Ensure options is an array
-        if (!Array.isArray(options) || options.length < 2) {
-            return res.status(400).json({ message: "Options must be an array with at least two values" });
-        }
-
-        const imageBuff = req.files?.image?.[0]?.buffer;
-        if (!imageBuff) {
-            return res.status(400).json({ message: "image is required" });
-        }
-
-        const image = await uploadOnCloudinary(imageBuff)
-        if (!image) {
-            return res.status(400).json({ message: "Failed to upload image" });
-        }
-
+       
         // Create a new question
         const newQuestion = new Question({
-            question,
-            answer,
+            text,
+            correctAnswer,
             options,
-            subjectId,
-            image:image.secure_url
+            points,
+            id
         });
 
         // Save to database
@@ -54,10 +40,7 @@ const updateQuestion = async (req,res)=>{
             res.status(404).json({message:"Question does'nt exist"})
         }
 
-        if(req.files?.image?.[0]?.buffer) {
-            const uploadedImage = await uploadOnCloudinary(req.files.image[0].buffer);
-            if (uploadedImage) Question.image = uploadedImage.secure_image;
-        }
+        
 
         const updatedQ = await Question.findOneAndUpdate(
             { _id: questionId },
@@ -74,7 +57,7 @@ const updateQuestion = async (req,res)=>{
 
 const getQuestions = async (req, res) => {
     try {
-        const questions = await Question.aggregate([{ $sample: { size: 10 } }]); // Fetch 10 random questions
+        const questions = await Question.find(); // Fetch 10 random questions
 
         res.status(200).json({ message: "Questions fetched successfully", questions });
     } catch (error) {
